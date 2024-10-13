@@ -1,0 +1,43 @@
+{% extends "main/base.html" %}
+{% load static %}
+
+{% block extra_style %}
+<link rel="stylesheet" href="{% static 'main/css/friends.css' %}">
+{% endblock %}
+
+{% block header_title %}
+フレンド一覧ページ
+{% endblock %}
+
+{% block content %}
+<div class="friends">
+    {# 友達のリスト表示部分 #}
+    <ul class="friends-list">
+        {% for friend, _, date in friends %}
+        <li class="friends-list__item">
+            <a href="{% url 'talk_room' friend.id %}" class="friends-list__link">
+                <div class="friends-list__username">
+                    {{ friend.username }}<br>
+                    {{ date }}
+                </div>
+            </a>
+        </li>
+        {% endfor %}
+    </ul>
+    <div class="pagination">
+        <span class="step-links">
+            {% if page_obj.has_previous %}
+            <a href="{% url 'friends' %}?page=1">&laquo; 先頭へ</a>
+            <a href="{% url 'friends' %}?page={{ page_obj.previous_page_number }}">前へ</a>
+            {% endif %}
+
+            <span class="current">{{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span>
+
+            {% if page_obj.has_next %}
+            <a href="{% url 'friends' %}?page={{ page_obj.next_page_number }}">次へ</a>
+            <a href="{% url 'friends' %}?page={{ page_obj.paginator.num_pages }}">最後へ &raquo;</a>
+            {% endif %}
+        </span>
+    </div>
+</div>
+{% endblock %}
